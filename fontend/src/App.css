@@ -1,0 +1,55 @@
+.main{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10vh;
+  flex-direction: column;
+}
+.lightbg{
+  background-color: #4B495F;
+}
+h1{
+  padding: 5px 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+.square-wrapper{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.left,.right{
+  height: 30px;
+  width: 120px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  text-align: center;
+  padding-top: 7px;
+  font-family: sans-serif;
+}
+.players{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15vw;
+}
+.winner{
+  font-size: 20px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+}
+.playonline{
+  background-color: #e4ca56;
+  font-size: 60px;
+  border-radius: 5px;
+  outline: none;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 40vh;
+  border: none;
+  padding: 5px 10px;
+}
+

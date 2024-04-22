@@ -52,4 +52,20 @@ h1{
   border: none;
   padding: 5px 10px;
 }
-
+.waiting{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  font-size: 30px;
+  top:0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.current-move-circle{
+  background-color: #3fa7f0 !important;
+}
+.current-move-cross{
+  background-color: #DD7F9F !important;
+}

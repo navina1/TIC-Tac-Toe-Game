@@ -42,36 +42,46 @@ const crossSvg = (
         </g>
     </svg>
 );
-function Square({ setGameState, id,currentPlayer,setCurrentPlayer,winner,winnerArray}) {
-    const [icon,setIcon]=useState(null);
-    const clickHandle=()=>{
-        if(winner) return
-        if(!icon){
-            if(currentPlayer=="circle"){
+function Square({ currentElement,gameState, socket, setGameState, id, currentPlayer, setCurrentPlayer, winner, winnerArray }) {
+    const [icon, setIcon] = useState(null);
+    const clickHandle = () => {
+        if (winner) return
+        if (!icon) {
+            if (currentPlayer == "circle") {
                 setIcon(circleSvg)
-            }else{
+            } else {
                 setIcon(crossSvg)
             }
-            let temp=currentPlayer;
-            currentPlayer =="circle" ? setCurrentPlayer("cross") : setCurrentPlayer("circle");
-            setGameState((prev)=>{
-                let newState=[...prev];
-                const row=Math.floor(id / 3);
-                const col=id % 3;
-                newState[row][col]=temp;
-                console.log(newState);
+            let temp = currentPlayer;
+            socket.emit("playerMove", {
+                state: {
+                    id,
+                    sign: temp,
+                }
+            })
+            currentPlayer == "circle" ? setCurrentPlayer("cross") : setCurrentPlayer("circle");
+
+            setGameState((prev) => {
+                let newState = [...prev];
+                const row = Math.floor(id / 3);
+                const col = id % 3;
+                newState[row][col] = temp;
                 return newState;
             }
             )
         }
     }
     return (
-        <div 
-            onClick={clickHandle} 
-            className={`square ${winner ? 'not-allowed':""} ${winnerArray.includes(id) ? winner+"-won" :""}`}
+        <div
+            onClick={clickHandle}
+            className={`square ${winner ? 'not-allowed' : ""} ${winnerArray.includes(id) ? winner + "-won" : ""}`}
 
         >
-            {icon}
+            {currentElement == "circle"
+                ? circleSvg
+                : currentElement == "cross"
+                    ? crossSvg
+                    : icon}
         </div>
     )
 }

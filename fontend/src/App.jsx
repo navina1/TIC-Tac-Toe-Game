@@ -25,18 +25,25 @@ function App() {
       setWinner(result)
     }
     if(result){
+      socket?.emit("exit");
       setTimeout(()=>{
           handleTimeout()
-      },200)
+      },5000)
     }
 
   }, [gameState])
   const handleTimeout=()=>{
-    socket.emit("exit");
+
+    console.log("entered");
     setPlayOnline(false);
     setOpponentName(null);
     setSocket(null);
-    setPlayerName(null)
+    setPlayerName(null);
+    setWinner(null);
+    setWinnerArray([]);
+    setCurrentPlayer('');
+    setPlayingAs(null);
+    setCurrentPlayer("circle")
   }
   const checkWinner = () => {
     // Check rows and columns for a winner
@@ -114,10 +121,10 @@ function App() {
   socket?.on("opponentFound", function (data) {
     setOpponentName(data.opponentName);
     setPlayingAs(data.playingAs)
-    //console.log(data.playingAs);
+    setGameState(data.renderFrom)
+    console.log(gameState);
   })
   socket?.on("enemyMoved",(data)=>{
-    console.log(data)
     const id = data.state.id;
     setGameState((prevState) => {
       let newState = [...prevState];
@@ -129,7 +136,11 @@ function App() {
     setCurrentPlayer(data.state.sign === "circle" ? "cross" : "circle");
   })
   socket?.on("opponentLeftMatch",()=>{
-    setWinner("OpponentLeft")
+    setWinner("OpponentLeft");
+    socket?.emit("exit");
+      setTimeout(()=>{
+          handleTimeout()
+    },5000)
   })
   if (!playOnline) {
     return (
@@ -146,6 +157,7 @@ function App() {
     )
   }
   if (playOnline && opponentName) {
+    console.log(gameState)
     return (
       <div className='main'>
         <div className='players'>
@@ -159,7 +171,7 @@ function App() {
         <div>
           <h1 className='lightbg'>Tic Tac Toe</h1>
           <div className='square-wrapper'>
-            {gameState.map((array, rowIndex) => {
+            {gameState?.map((array, rowIndex) => {
               return array.map((item, colIndex) => {
                 return <Square
                   socket={socket}
@@ -173,6 +185,7 @@ function App() {
                   winnerArray={winnerArray}
                   currentElement={item}
                   playingAs={playingAs}
+                  playOnline={playOnline}
                 />
               })
             })}

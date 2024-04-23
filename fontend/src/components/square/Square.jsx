@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import "./square.css";
+import { useEffect } from 'react';
 
 const circleSvg = (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,8 +43,9 @@ const crossSvg = (
         </g>
     </svg>
 );
-function Square({ playingAs,currentElement,gameState, socket, setGameState, id, currentPlayer, setCurrentPlayer, winner, winnerArray }) {
+function Square({playOnline, playingAs,currentElement,gameState, socket, setGameState, id, currentPlayer, setCurrentPlayer, winner, winnerArray }) {
     const [icon, setIcon] = useState(null);
+    console.log(winner)
     const clickHandle = () => {
         if(playingAs!=currentPlayer){
             return

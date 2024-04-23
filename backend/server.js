@@ -8,6 +8,11 @@ const io = new Server(httpServer, {
 });
 const allUsers = [];
 const allRooms = [];
+const renderFrom = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+  ]
 io.on("connection", (socket) => {
     allUsers[socket.id] = { socket: socket, online: true };
     socket.on("disconnect", () => {
@@ -78,11 +83,13 @@ io.on("connection", (socket) => {
 
             currentUser.socket.emit("opponentFound", {
                 opponentName: opponentPlayer.playerName,
-                playingAs: "circle"
+                playingAs: "circle",
+                renderFrom:renderFrom
             });
             opponentPlayer.socket.emit("opponentFound", {
                 opponentName: currentUser.playerName,
-                playingAs: "cross"
+                playingAs: "cross",
+                renderFrom:renderFrom
             });
 
             // Handle player moves between players

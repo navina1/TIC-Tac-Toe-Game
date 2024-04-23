@@ -115,6 +115,9 @@ function App() {
     });
     setCurrentPlayer(data.state.sign === "circle" ? "cross" : "circle");
   })
+  socket?.on("opponentLeftMatch",()=>{
+    setWinner("OpponentLeft")
+  })
   if (!playOnline) {
     return (
       <div className='main'>
@@ -161,10 +164,11 @@ function App() {
               })
             })}
           </div>
-          {winner && (
+          {winner && winner  !== 'OpponentLeft' && (
             <h3 className={`${winner === playingAs ? "winner" : "looser"}`}>{winner === "draw" ? "It's a draw! 😐" : `${winner==playingAs ? "Congratulations! 🎉 You won the game! 🏆"
               :"Better luck next time! 😊 You lost the game. 💔"} `}</h3>
           )}
+          {winner && winner == 'OpponentLeft' &&(<h3 className='looser'>Opponent left the game 😐</h3>)}
           {!winner && opponentName &&(
             <h3>You are playing against   {opponentName}</h3>
           )}

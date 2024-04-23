@@ -38,7 +38,19 @@ io.on("connection", (socket) => {
         // Remove the disconnected socket from the list of users
         delete allUsers[socket.id];
     });
-    
+    socket.on("exit",()=>{
+        const roomIndex = Object.values(allRooms).findIndex(room => {
+            const players = room.players;
+            const player1 = players[0];
+            const player2 = players[1];
+            return player1.socket.id === socket.id || (player2 && player2.socket.id === socket.id);
+        });
+        if (roomIndex !== -1) {
+            const room = Object.values(allRooms)[roomIndex];
+            delete allRooms[room.id];
+        }
+        delete allUsers[socket.id];
+    })
 
     socket.on("request_to_play", (data) => {
         const currentUser = allUsers[socket.id];
@@ -85,22 +97,6 @@ io.on("connection", (socket) => {
             currentUser.socket.emit("opponentNotFound")
         }
     })
-    // socket.on("disconnect", function () {
-    //     const currentUser = allUsers[socket.id];
-    //     currentUser.online = false;
-    //     currentUser.playing = false;
-    //     for (let i = 0; i < allRooms.length; i++) {
-    //         const { player1, player2 } = allRooms[i];
-    //         if (player1.socket.id == socket.id) {
-    //             player2.socket.emit("opponentLeftMatch");
-    //             break
-    //         }
-    //         if (player2.socket.id == socket.id) {
-    //             player1.socket.emit("opponentLeftMatch");
-    //             break;
-    //         }
-    //     }
-    // })
 });
 function createRoom() {
     const roomId = generateRoomId();
@@ -114,16 +110,5 @@ function createRoom() {
 function generateRoomId() {
     return Math.random().toString(36).substring(2, 7);
 }
-function leaveRoom(socket) {
-    const currentUser = socket;
-    const roomId = currentUser.roomId;
-    if (roomId && allRooms[roomId]) {
-        const room = allRooms[roomId];
-        room.players = room.players.filter(player => player !== currentUser);
-        delete currentUser.roomId;
-        if (room.players.length === 0) {
-            delete allRooms[roomId];
-        }
-    }
-}
+
 httpServer.listen(3000);

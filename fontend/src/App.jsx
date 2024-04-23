@@ -24,7 +24,20 @@ function App() {
     if (result == "circle" || result == "cross" || result == "draw") {
       setWinner(result)
     }
+    if(result){
+      setTimeout(()=>{
+          handleTimeout()
+      },200)
+    }
+
   }, [gameState])
+  const handleTimeout=()=>{
+    socket.emit("exit");
+    setPlayOnline(false);
+    setOpponentName(null);
+    setSocket(null);
+    setPlayerName(null)
+  }
   const checkWinner = () => {
     // Check rows and columns for a winner
     for (let i = 0; i < 3; i++) {

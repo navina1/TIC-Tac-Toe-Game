@@ -156,12 +156,14 @@ function App() {
                   winner={winner}
                   winnerArray={winnerArray}
                   currentElement={item}
+                  playingAs={playingAs}
                 />
               })
             })}
           </div>
           {winner && (
-            <h3 className='winner'>{winner === "draw" ? "Game Over" : `${winner} won the game`}</h3>
+            <h3 className={`${winner === playingAs ? "winner" : "looser"}`}>{winner === "draw" ? "It's a draw! 😐" : `${winner==playingAs ? "Congratulations! 🎉 You won the game! 🏆"
+              :"Better luck next time! 😊 You lost the game. 💔"} `}</h3>
           )}
           {!winner && opponentName &&(
             <h3>You are playing against   {opponentName}</h3>

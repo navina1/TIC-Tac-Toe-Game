@@ -42,9 +42,12 @@ const crossSvg = (
         </g>
     </svg>
 );
-function Square({ currentElement,gameState, socket, setGameState, id, currentPlayer, setCurrentPlayer, winner, winnerArray }) {
+function Square({ playingAs,currentElement,gameState, socket, setGameState, id, currentPlayer, setCurrentPlayer, winner, winnerArray }) {
     const [icon, setIcon] = useState(null);
     const clickHandle = () => {
+        if(playingAs!=currentPlayer){
+            return
+        }
         if (winner) return
         if (!icon) {
             if (currentPlayer == "circle") {
@@ -74,7 +77,10 @@ function Square({ currentElement,gameState, socket, setGameState, id, currentPla
     return (
         <div
             onClick={clickHandle}
-            className={`square ${winner ? 'not-allowed' : ""} ${winnerArray.includes(id) ? winner + "-won" : ""}`}
+            className={`square ${winner ? 'not-allowed' : ""} 
+                        ${winnerArray.includes(id) ? winner + "-won" : ""}
+                        ${currentPlayer !=playingAs ? 'not-allowed' : ""}
+                    `}
 
         >
             {currentElement == "circle"
